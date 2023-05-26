@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840419227315",
+    "project_id": "tpflutter-e9df2",
+    "storage_bucket": "tpflutter-e9df2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840419227315:android:7f98b723cfc79135aa62c6",
+        "android_client_info": {
+          "package_name": "com.example.tp_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxVagnOQn1TLpaQEdIfANOGc-wMYS7vnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
