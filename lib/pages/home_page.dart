@@ -80,14 +80,32 @@ class AccueilPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _onPlusTap(context);
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.grey, // Couleur de fond du bouton
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  _onCrashTap(context);
+                },
+                child: Icon(Icons.car_crash),
+                backgroundColor: Colors.red, // Couleur de fond du bouton
+              ),
+              SizedBox(width: 16),
+              FloatingActionButton(
+                onPressed: () {
+                  _onPlusTap(context);
+                },
+                child: Icon(Icons.add),
+                backgroundColor: Colors.grey, // Couleur de fond du bouton
+              ),
+            ],
+          ),
+        ],
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       // Position du bouton
     );
@@ -95,6 +113,10 @@ class AccueilPage extends StatelessWidget {
 
   void _onTileTap(BuildContext context, Poste poste) {
     DetailsPage.navigateTo(context, poste);
+  }
+
+  void _onCrashTap(BuildContext context) {
+    // Logique pour gérer le tap sur le bouton crash
   }
 
   void _onPlusTap(BuildContext context) {
