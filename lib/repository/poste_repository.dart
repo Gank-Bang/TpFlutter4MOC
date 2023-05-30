@@ -11,6 +11,7 @@ class PosteRepository {
   Future<List<Poste>> getProducts() async {
     try {
       final products = await remoteDataSource.getPoste();
+      await Future.delayed(const Duration(seconds: 2));
       return products;
     } catch (e) {
       rethrow;

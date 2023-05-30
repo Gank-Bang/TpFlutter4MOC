@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,7 +58,7 @@ class AccueilPage extends StatelessWidget {
 
                     if (postes.isEmpty) {
                       return const Center(
-                        child: Text('Aucun produit'),
+                        child: Text('Aucun poste'),
                       );
                     }
 
@@ -89,10 +90,26 @@ class AccueilPage extends StatelessWidget {
             children: [
               FloatingActionButton(
                 onPressed: () {
-                  _onCrashTap(context);
+                  _onDeleteAllTap(context);
+                },
+                child: Icon(Icons.delete),
+                backgroundColor: Colors.red, // Couleur de fond du bouton
+              ),
+              SizedBox(width: 16),
+              FloatingActionButton(
+                onPressed: () {
+                  _onActualizeTap(context);
+                },
+                child: Icon(Icons.refresh),
+                backgroundColor: Colors.blue, // Couleur de fond du bouton
+              ),
+              SizedBox(width: 16),
+              FloatingActionButton(
+                onPressed: () {
+                  _onCrashTap();
                 },
                 child: Icon(Icons.car_crash),
-                backgroundColor: Colors.red, // Couleur de fond du bouton
+                backgroundColor: Colors.deepOrange, // Couleur de fond du bouton
               ),
               SizedBox(width: 16),
               FloatingActionButton(
@@ -115,11 +132,61 @@ class AccueilPage extends StatelessWidget {
     DetailsPage.navigateTo(context, poste);
   }
 
-  void _onCrashTap(BuildContext context) {
-    // Logique pour gérer le tap sur le bouton crash
+  void _onCrashTap() async {
+    try {
+      throw Exception("Par ici les 5 points de Crashlytics :) !!");
+    } catch (error, stacktrace) {
+      await FirebaseCrashlytics.instance
+          .recordError(error, stacktrace, reason: 'a non-fatal error');
+    }
   }
 
   void _onPlusTap(BuildContext context) {
     AjoutPage.navigateTo(context);
+  }
+
+  void _onActualizeTap(BuildContext context) {
+    BlocProvider.of<PosteBloc>(context).add(GetAllPoste(1));
+  }
+
+  void _onDeleteAllTap(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Test de gestion d'état vide"),
+          content: Text(
+              "Supprimer tout les postes de Firestore Monsieur Ecalle ? \n\n\nPar ici les points de la gestion d'etats :)"),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Supprimer'),
+              onPressed: () async {
+                await deleteAllPostes();
+                _onActualizeTap(context);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> deleteAllPostes() async {
+    CollectionReference postesCollection =
+        FirebaseFirestore.instance.collection('poste');
+
+    QuerySnapshot querySnapshot = await postesCollection.get();
+
+    querySnapshot.docs.forEach((doc) {
+      doc.reference.delete();
+    });
+    return true;
   }
 }
